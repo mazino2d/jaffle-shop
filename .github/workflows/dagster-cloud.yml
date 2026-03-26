@@ -1,0 +1,44 @@
+name: Deploy to Dagster Cloud
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Generate dbt manifest
+        working-directory: dbt
+        env:
+          MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }}
+          DBT_TARGET: cloud
+        run: |
+          dbt deps --profiles-dir .
+          dbt parse --profiles-dir . --target cloud
+
+      - name: Deploy to Dagster Cloud Serverless
+        uses: dagster-io/dagster-cloud-action/actions/build_deploy_python_executable@v0.1
+        with:
+          dagster_cloud_api_token: ${{ secrets.DAGSTER_CLOUD_API_TOKEN }}
+          organization_id: ${{ vars.DAGSTER_CLOUD_ORGANIZATION_ID }}
+          deployment: prod
+          python_version: "3.11"
+          location_name: jaffle-shop
+          package_name: dagster_project
+          working_directory: .
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

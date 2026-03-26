@@ -9,3 +9,7 @@ jaffle_shop:
       type: duckdb
       path: "{{ env_var('DUCKDB_PROD_PATH', '../jaffle_shop_prod.duckdb') }}"
       threads: 4
+    cloud:
+      type: duckdb
+      path: "md:jaffle_shop"
+      threads: 4
