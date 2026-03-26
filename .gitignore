@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+dist/
+build/
+
+# Environment
+.env
+*.env.local
+
+# DuckDB databases
+*.duckdb
+*.duckdb.wal
+
+# dbt
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+dbt/.user.yml
+
+# Dagster
+.dagster/
+dagster_home/
+.tmp_dagster*
+
+# OS
+.DS_Store

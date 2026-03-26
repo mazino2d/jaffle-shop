@@ -1,0 +1,81 @@
+version: 2
+
+sources:
+  - name: raw
+    description: "Raw tables loaded by the dlt ingestion pipeline."
+
+    tables:
+      - name: customers
+        description: "Customer master data synced from the backend (replace on each load)."
+        loaded_at_field: updated_at
+        freshness:
+          warn_after: { count: 12, period: hour }
+          error_after: { count: 24, period: hour }
+        columns:
+          - name: id
+            tests: [unique, not_null]
+          - name: email
+            tests: [not_null]
+          - name: status
+            tests:
+              - accepted_values:
+                  values: ["active", "churned", "at_risk"]
+
+      - name: products
+        description: "Product catalog synced from the backend (replace on each load)."
+        loaded_at_field: updated_at
+        freshness:
+          warn_after: { count: 24, period: hour }
+          error_after: { count: 48, period: hour }
+        columns:
+          - name: id
+            tests: [unique, not_null]
+
+      - name: orders
+        description: "Order records synced from the backend (replace on each load)."
+        loaded_at_field: updated_at
+        freshness:
+          warn_after: { count: 12, period: hour }
+          error_after: { count: 24, period: hour }
+        columns:
+          - name: id
+            tests: [unique, not_null]
+          - name: customer_id
+            tests: [not_null]
+          - name: status
+            tests:
+              - accepted_values:
+                  values: ["placed", "shipped", "completed", "returned"]
+
+      - name: payments
+        description: "Payment events (append-only log)."
+        loaded_at_field: created_at
+        freshness:
+          warn_after: { count: 12, period: hour }
+          error_after: { count: 24, period: hour }
+        columns:
+          - name: id
+            # not unique at raw layer — append loads may duplicate rows;
+            # uniqueness is enforced at staging via incremental unique_key
+            tests: [not_null]
+          - name: order_id
+            tests: [not_null]
+          - name: status
+            tests:
+              - accepted_values:
+                  values: ["success", "failed", "refunded"]
+
+      - name: order_items
+        description: "Order line items (append-only log)."
+        loaded_at_field: created_at
+        freshness:
+          warn_after: { count: 12, period: hour }
+          error_after: { count: 24, period: hour }
+        columns:
+          - name: id
+            # not unique at raw layer — see payments note above
+            tests: [not_null]
+          - name: order_id
+            tests: [not_null]
+          - name: product_id
+            tests: [not_null]

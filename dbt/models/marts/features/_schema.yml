@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: customer_features
+    description: >
+      RFM feature table for ML models. One row per customer with lifetime value,
+      order frequency, recency, return rate, and order cadence.
+    columns:
+      - name: customer_id
+        description: "Primary key."
+        tests: [unique, not_null]
+      - name: days_since_last_order
+        tests: [not_null]
+      - name: order_frequency
+        tests: [not_null]
+      - name: lifetime_value
+        tests: [not_null]
+      - name: return_rate
+        tests: [not_null]
+      - name: avg_order_value
+        tests: [not_null]
+
+  - name: order_features
+    description: >
+      Per-order features for ML models. Combines order, payment, item, and customer
+      context into a single wide table.
+    columns:
+      - name: order_id
+        description: "Primary key."
+        tests: [unique, not_null]
+      - name: customer_id
+        tests: [not_null]
+      - name: payment_failure_rate
+        tests: [not_null]

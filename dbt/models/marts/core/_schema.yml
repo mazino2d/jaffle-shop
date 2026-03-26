@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "One row per customer with current profile and lifetime order summary."
+    columns:
+      - name: customer_id
+        description: "Primary key."
+        tests: [unique, not_null]
+      - name: email
+        tests: [not_null]
+      - name: status
+        tests:
+          - accepted_values:
+              values: ["active", "churned", "at_risk"]
+      - name: total_orders
+        tests: [not_null]
+      - name: total_spent
+        tests: [not_null]
+
+  - name: fct_orders
+    description: "One row per order with payment summary."
+    columns:
+      - name: order_id
+        description: "Primary key."
+        tests: [unique, not_null]
+      - name: customer_id
+        tests: [not_null]
+      - name: order_status
+        tests:
+          - accepted_values:
+              values: ["placed", "shipped", "completed", "returned"]
+      - name: is_paid
+        tests: [not_null]

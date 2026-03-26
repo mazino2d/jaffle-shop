@@ -1,0 +1,40 @@
+version: 2
+
+exposures:
+  - name: customer_churn_model
+    label: "Customer Churn Prediction"
+    type: ml
+    maturity: medium
+    description: >
+      ML model predicting 30-day churn probability. Uses RFM features:
+      recency, frequency, lifetime value, return rate, and order cadence.
+    depends_on:
+      - ref("customer_features")
+    owner:
+      name: Data Team
+      email: data@jaffle-shop.example
+
+  - name: return_risk_model
+    label: "Order Return Risk"
+    type: ml
+    maturity: low
+    description: >
+      ML model predicting whether an order will be returned.
+      Uses order-level features including payment behavior and customer history.
+    depends_on:
+      - ref("order_features")
+    owner:
+      name: Data Team
+      email: data@jaffle-shop.example
+
+  - name: executive_dashboard
+    label: "Executive KPI Dashboard"
+    type: dashboard
+    maturity: high
+    description: "Top-line metrics: revenue, order volume, customer counts by status."
+    depends_on:
+      - ref("fct_orders")
+      - ref("dim_customers")
+    owner:
+      name: Data Team
+      email: data@jaffle-shop.example
