@@ -1,0 +1,17 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "dbt/.user.yml": true,
+        "dbt/dbt_packages": true,
+        "**/*.egg-info": true,
+        "build": true,
+        "dist": true,
+        ".tmp_dagster*":true,
+    },
+    "python-envs.defaultEnvManager": "ms-python.python:conda",
+    "python-envs.defaultPackageManager": "ms-python.python:conda"
+}

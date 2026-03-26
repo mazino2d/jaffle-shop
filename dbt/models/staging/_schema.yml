@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "Current state of each customer (latest snapshot version)."
+    columns:
+      - name: customer_id
+        tests: [unique, not_null]
+      - name: email
+        tests: [not_null]
+      - name: status
+        tests:
+          - accepted_values:
+              values: ["active", "churned", "at_risk"]
+
+  - name: stg_products
+    description: "Current state of each product (latest snapshot version)."
+    columns:
+      - name: product_id
+        tests: [unique, not_null]
+      - name: price
+        tests: [not_null]
+
+  - name: stg_orders
+    description: "Current state of each order (latest snapshot version)."
+    columns:
+      - name: order_id
+        tests: [unique, not_null]
+      - name: customer_id
+        tests: [not_null]
+      - name: status
+        tests:
+          - accepted_values:
+              values: ["placed", "shipped", "completed", "returned"]
+
+  - name: stg_payments
+    description: "Cleaned payment events (incremental from raw log)."
+    columns:
+      - name: payment_id
+        tests: [unique, not_null]
+      - name: order_id
+        tests: [not_null]
+      - name: payment_status
+        tests:
+          - accepted_values:
+              values: ["success", "failed", "refunded"]
+
+  - name: stg_order_items
+    description: "Cleaned order line items (incremental from raw log)."
+    columns:
+      - name: order_item_id
+        tests: [unique, not_null]
+      - name: order_id
+        tests: [not_null]
