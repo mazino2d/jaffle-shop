@@ -15,8 +15,8 @@ SELECT
     product_id,
     quantity,
     unit_price,
-    (quantity * unit_price) AS line_total,
-    created_at::TIMESTAMP AS created_at
+    created_at::TIMESTAMP AS created_at,
+    (quantity * unit_price) AS line_total
 FROM {{ source("raw", "order_items") }}
 
 {% if is_incremental() %}

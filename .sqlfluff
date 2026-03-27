@@ -8,15 +8,15 @@ exclude_rules = RF02
 project_dir = ./dbt
 profiles_dir = ./dbt
 
-[sqlfluff:rules:layout:indent]
+[sqlfluff:rules:layout.indent]
 indent_unit = space
 tab_space_size = 4
 
-[sqlfluff:rules:capitalisation:keywords]
+[sqlfluff:rules:capitalisation.keywords]
 capitalisation_policy = upper
 
-[sqlfluff:rules:capitalisation:identifiers]
+[sqlfluff:rules:capitalisation.identifiers]
 capitalisation_policy = lower
 
-[sqlfluff:rules:capitalisation:functions]
+[sqlfluff:rules:capitalisation.functions]
 capitalisation_policy = upper
