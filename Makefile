@@ -19,7 +19,7 @@ docs:
 	cd dbt && dbt docs generate --profiles-dir . && dbt docs serve --profiles-dir .
 
 dagster:
-	dagster dev -f dagster_project/definitions.py --log-level warning
+	dagster dev -f dag/definitions.py --log-level warning
 
 lint:
 	sqlfluff lint dbt/models

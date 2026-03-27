@@ -14,8 +14,8 @@ from pathlib import Path
 from dagster import Definitions
 from dagster_dbt import DbtCliResource, dbt_assets
 
-from dagster_project.assets.ingestion import raw_jaffle_data
-from dagster_project.loader import build_jobs_and_schedules
+from dag.assets.ingestion import raw_jaffle_data
+from dag.loader import build_jobs_and_schedules
 
 REPO_ROOT = Path(__file__).parent.parent
 DBT_PROJECT_DIR = REPO_ROOT / "dbt"

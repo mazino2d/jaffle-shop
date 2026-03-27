@@ -1,7 +1,7 @@
 """
 Config-driven DAG factory.
 
-Reads YAML files from dagster_project/dags/ and creates Dagster jobs and
+Reads YAML files from dag/dags/ and creates Dagster jobs and
 schedules. Each YAML file maps to one job. Cron-triggered DAGs get a schedule;
 asset_sensor-triggered DAGs rely on Dagster's asset lineage to chain execution.
 """
