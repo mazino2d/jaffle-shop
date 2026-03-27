@@ -21,6 +21,9 @@ jobs:
       - name: Install dependencies
         run: pip install -e ".[dev]"
 
+      - name: Build requirements.txt
+        run: pip-compile --output-file=requirements.txt pyproject.toml
+
       - name: Generate dbt manifest
         working-directory: dbt
         env:

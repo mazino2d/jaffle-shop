@@ -7,13 +7,6 @@ repos:
       - id: check-yaml
       - id: check-merge-conflict
 
-  - repo: https://github.com/jazzband/pip-tools
-    rev: v7.5.3
-    hooks:
-      - id: pip-compile
-        args: [pyproject.toml, --output-file=requirements.txt]
-        files: ^pyproject\.toml$
-
   - repo: https://github.com/sqlfluff/sqlfluff
     rev: 3.3.0
     hooks:
