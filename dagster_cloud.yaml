@@ -4,3 +4,6 @@ locations:
       package_name: dagster_project
     build:
       directory: .
+    env_vars:
+      - MOTHERDUCK_TOKEN
+      - DBT_TARGET
