@@ -2,8 +2,8 @@ name: Deploy dbt Docs
 
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - main
 
 permissions:
   contents: read
