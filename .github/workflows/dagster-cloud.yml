@@ -38,5 +38,5 @@ jobs:
           python_version: "3.11"
         env:
           DAGSTER_CLOUD_API_TOKEN: ${{ secrets.DAGSTER_CLOUD_API_TOKEN }}
-          DAGSTER_CLOUD_ORGANIZATION_ID: ${{ vars.DAGSTER_CLOUD_ORGANIZATION_ID }}
+          DAGSTER_CLOUD_URL: ${{ vars.DAGSTER_CLOUD_URL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
