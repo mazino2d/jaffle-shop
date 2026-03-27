@@ -33,12 +33,10 @@ jobs:
       - name: Deploy to Dagster Cloud Serverless
         uses: dagster-io/dagster-cloud-action/actions/build_deploy_python_executable@v0.1
         with:
-          dagster_cloud_api_token: ${{ secrets.DAGSTER_CLOUD_API_TOKEN }}
-          organization_id: ${{ vars.DAGSTER_CLOUD_ORGANIZATION_ID }}
+          dagster_cloud_file: dagster_cloud.yaml
           deployment: prod
           python_version: "3.11"
-          location_name: jaffle-shop
-          package_name: dagster_project
-          working_directory: .
         env:
+          DAGSTER_CLOUD_API_TOKEN: ${{ secrets.DAGSTER_CLOUD_API_TOKEN }}
+          DAGSTER_CLOUD_ORGANIZATION_ID: ${{ vars.DAGSTER_CLOUD_ORGANIZATION_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

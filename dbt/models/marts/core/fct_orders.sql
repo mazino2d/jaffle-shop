@@ -1,5 +1,5 @@
 -- Mart: fct_orders
--- One row per order, enriched with payment summary and customer snapshot at order time.
+-- One row per order with payment summary and customer snapshot at order time.
 SELECT
     o.order_id,
     o.customer_id,

@@ -1,5 +1,5 @@
 -- Intermediate: customer order history
--- Aggregates order-level metrics per customer, used by both core and feature models.
+-- Aggregates order-level metrics per customer, used by core and feature models.
 SELECT
     o.customer_id,
     COUNT(o.order_id) AS total_orders,
