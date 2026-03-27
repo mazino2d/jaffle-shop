@@ -1,4 +1,4 @@
-.PHONY: ingest snapshot build build-prod freshness docs dagster lint fix pipeline install
+.PHONY: ingest snapshot build build-prod freshness docs dagster lint fix pipeline sync install
 
 ingest:
 	python dlt/pipeline.py
@@ -29,6 +29,9 @@ fix:
 
 pipeline:
 	$(MAKE) ingest && $(MAKE) snapshot && $(MAKE) build
+
+sync:
+	pip-compile pyproject.toml -o requirements.txt
 
 install:
 	pip install -e ".[dev]"
