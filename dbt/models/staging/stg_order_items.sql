@@ -20,5 +20,5 @@ SELECT
 FROM {{ source("raw", "order_items") }}
 
 {% if is_incremental() %}
-WHERE created_at::TIMESTAMP > (SELECT MAX(created_at) FROM {{ this }})
+    WHERE created_at::TIMESTAMP > (SELECT MAX(created_at) FROM {{ this }})
 {% endif %}

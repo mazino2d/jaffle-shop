@@ -33,7 +33,7 @@ jobs:
       - name: Deploy to Dagster Cloud Serverless
         uses: dagster-io/dagster-cloud-action/actions/build_deploy_python_executable@v0.1
         with:
-          dagster_cloud_file: dagster_cloud.yaml
+          dagster_cloud_file: ${{ github.workspace }}/dagster_cloud.yaml
           deployment: prod
           python_version: "3.11"
         env:
