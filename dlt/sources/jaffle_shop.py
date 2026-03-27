@@ -9,14 +9,13 @@ Simulates backend data using Faker. Tables are split into two categories:
 """
 
 import random
+import uuid
 from datetime import datetime, timedelta
 
 import dlt
 from faker import Faker
 
 fake = Faker()
-Faker.seed(42)
-random.seed(42)
 
 CUSTOMER_COUNT = 200
 PRODUCT_COUNT = 30
@@ -98,9 +97,9 @@ def payments():
     statuses = ["success", "failed", "refunded"]
     for i in range(1, ORDER_COUNT + 1):
         n_payments = random.randint(1, 2)
-        for j in range(n_payments):
+        for _ in range(n_payments):
             yield {
-                "id": (i - 1) * 2 + j + 1,
+                "id": str(uuid.uuid4()),
                 "order_id": i,
                 "method": random.choice(methods),
                 "status": random.choices(statuses, weights=[85, 10, 5])[0],
@@ -112,18 +111,16 @@ def payments():
 @dlt.resource(name="order_items", write_disposition="append", primary_key="id")
 def order_items():
     """Line items per order — immutable log, append-only."""
-    item_id = 1
     for order_id in range(1, ORDER_COUNT + 1):
         for _ in range(random.randint(1, 5)):
             yield {
-                "id": item_id,
+                "id": str(uuid.uuid4()),
                 "order_id": order_id,
                 "product_id": random.randint(1, PRODUCT_COUNT),
                 "quantity": random.randint(1, 4),
                 "unit_price": round(random.uniform(3.0, 25.0), 2),
                 "created_at": _random_date(_ONE_MONTH_AGO, _NOW).isoformat(),
             }
-            item_id += 1
 
 
 @dlt.source
