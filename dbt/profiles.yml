@@ -12,4 +12,4 @@ jaffle_shop:
     cloud:
       type: duckdb
       path: "md:jaffle_shop"
-      threads: 4
+      threads: 1

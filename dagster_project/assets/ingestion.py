@@ -9,7 +9,7 @@ _DLT_SOURCES_DIR = str(Path(__file__).parent.parent.parent / "dlt")
 
 
 @asset(
-    group_name="raw",
+    group_name="raw_ingestion",
     description="Load all Jaffle Shop raw tables via dlt into DuckDB.",
 )
 def raw_jaffle_data(context: AssetExecutionContext) -> None:
@@ -27,15 +27,16 @@ def raw_jaffle_data(context: AssetExecutionContext) -> None:
     context.log.info(f"MOTHERDUCK_TOKEN set: {bool(motherduck_token)}")
 
     if motherduck_token:
-        duckdb_path = "md:jaffle_shop"
+        destination = dlt.destinations.motherduck("md:jaffle_shop")
+        context.log.info("Writing to: md:jaffle_shop (MotherDuck)")
     else:
         duckdb_path = os.getenv("DUCKDB_DEV_PATH", "./jaffle_shop_dev.duckdb")
-
-    context.log.info(f"Writing to: {duckdb_path}")
+        destination = dlt.destinations.duckdb(duckdb_path)
+        context.log.info(f"Writing to: {duckdb_path}")
 
     pipeline = dlt.pipeline(
         pipeline_name="jaffle_shop",
-        destination=dlt.destinations.duckdb(duckdb_path),
+        destination=destination,
         dataset_name="raw",
     )
 
