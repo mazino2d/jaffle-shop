@@ -23,10 +23,15 @@ def raw_jaffle_data(context: AssetExecutionContext) -> None:
     import dlt
     from sources.jaffle_shop import jaffle_shop
 
-    if os.getenv("MOTHERDUCK_TOKEN"):
+    motherduck_token = os.getenv("MOTHERDUCK_TOKEN")
+    context.log.info(f"MOTHERDUCK_TOKEN set: {bool(motherduck_token)}")
+
+    if motherduck_token:
         duckdb_path = "md:jaffle_shop"
     else:
         duckdb_path = os.getenv("DUCKDB_DEV_PATH", "./jaffle_shop_dev.duckdb")
+
+    context.log.info(f"Writing to: {duckdb_path}")
 
     pipeline = dlt.pipeline(
         pipeline_name="jaffle_shop",
