@@ -1,4 +1,4 @@
-name: Deploy dbt Docs
+name: Deploy Blog & dbt Docs
 
 on:
   push:
@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   deploy:
-    name: Generate & Deploy dbt Docs
+    name: Build & Deploy
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -44,10 +44,16 @@ jobs:
         working-directory: dbt
         run: dbt docs generate --profiles-dir .
 
+      - name: Build blog (MkDocs)
+        run: mkdocs build --strict
+
+      - name: Copy dbt docs into site
+        run: cp -r dbt/target site/dbt-docs
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dbt/target
+          path: site
 
       - name: Deploy to GitHub Pages
         id: deploy
