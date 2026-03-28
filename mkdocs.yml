@@ -1,0 +1,58 @@
+site_name: Data Engineering Blog
+site_description: Principles and patterns in data engineering, demonstrated with a real pipeline.
+site_url: https://mazino2d.github.io/jaffle-shop/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - toc.follow
+
+plugins:
+  - search
+  - blog:
+      blog_dir: blog
+      post_date_format: long
+      post_url_format: "{slug}"
+      archive: false
+      categories: false
+      pagination: false
+
+extra_javascript:
+  - javascripts/back-link.js
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/mazino2d/jaffle-shop
+
+nav:
+  - Home: index.md
+
+validation:
+  links:
+    unrecognized_links: ignore
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - admonition
+  - pymdownx.details
