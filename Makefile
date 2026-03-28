@@ -1,4 +1,4 @@
-.PHONY: ingest snapshot build build-prod freshness docs dagster lint fix pipeline sync install
+.PHONY: ingest snapshot build build-prod freshness docs blog dagster lint fix pipeline sync install
 
 ingest:
 	python dlt/pipeline.py
@@ -17,6 +17,9 @@ freshness:
 
 docs:
 	cd dbt && dbt docs generate --profiles-dir . && dbt docs serve --profiles-dir .
+
+blog:
+	mkdocs serve
 
 dagster:
 	dagster dev -f dag/definitions.py --log-level warning
