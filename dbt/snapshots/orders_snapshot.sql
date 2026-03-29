@@ -18,5 +18,6 @@
         placed_at::TIMESTAMP AS placed_at,
         updated_at::TIMESTAMP AS updated_at
     FROM {{ source("raw", "orders") }}
+    {{ snapshot_incremental_filter(this) }}
 
 {% endsnapshot %}
