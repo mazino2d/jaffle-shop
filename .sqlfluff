@@ -4,6 +4,7 @@ templater = dbt
 # RF02: reference qualification — disabled because dbt ref() calls are unqualified
 exclude_rules = RF02
 max_line_length = 120
+sql_file_exts = .sql
 
 [sqlfluff:templater:dbt]
 project_dir = ./dbt
