@@ -1,6 +1,11 @@
 -- Mart: dim_customers
--- One row per customer with current profile and lifetime order summary.
+-- One row per customer (current version) with surrogate keys and lifetime order summary.
+--
+-- sk:        Join key for fact tables — uniquely identifies this customer version.
+-- master_sk: Stable entity key — use for GROUP BY, COUNT DISTINCT, and cross-version analysis.
 SELECT
+    c.sk,
+    c.master_sk,
     c.customer_id,
     c.name,
     c.email,
@@ -8,6 +13,7 @@ SELECT
     c.status,
     c.created_at,
     c.updated_at,
+    c.valid_from,
 
     -- Order history aggregates
     co.first_order_at,
@@ -19,3 +25,4 @@ SELECT
 FROM {{ ref("stg_customers") }} AS c
 LEFT JOIN {{ ref("int_customer_orders") }} AS co
     ON c.customer_id = co.customer_id
+WHERE c.is_current = TRUE

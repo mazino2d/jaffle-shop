@@ -2,6 +2,8 @@
 -- RFM (Recency, Frequency, Monetary) features per customer for ML models.
 -- One row per customer, computed from current order and payment history.
 SELECT
+    dc.sk AS customer_sk,
+    dc.master_sk,
     dc.customer_id,
     dc.status AS customer_status,
     dc.country,

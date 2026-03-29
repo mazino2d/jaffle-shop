@@ -12,8 +12,12 @@ WITH order_items_summary AS (
 )
 
 SELECT
+    fo.order_sk,
+    fo.order_master_sk,
     fo.order_id,
     fo.customer_id,
+    fo.customer_sk,
+    fo.customer_master_sk,
     fo.order_status,
     fo.order_amount,
     fo.is_paid,
@@ -25,7 +29,7 @@ SELECT
     fo.unpaid_amount,
     cf.lifetime_value AS customer_ltv_at_order,
 
-    -- Order item features
+    -- Customer context features
     cf.order_frequency AS customer_order_frequency,
     cf.return_rate AS customer_return_rate,
     fo.placed_at,
@@ -35,15 +39,13 @@ SELECT
         ELSE 0
     END AS payment_failure_rate,
 
-    -- Customer context at order time
+    -- Order item features
     COALESCE(oi.item_count, 0) AS item_count,
     COALESCE(oi.total_quantity, 0) AS total_quantity,
     COALESCE(oi.unique_products, 0) AS unique_products,
-
     COALESCE(oi.avg_unit_price, 0) AS avg_unit_price
 FROM {{ ref("fct_orders") }} AS fo
-
-LEFT JOIN order_items_summary AS oi ON fo.order_id = oi.order_id
-
+LEFT JOIN order_items_summary AS oi
+    ON fo.order_id = oi.order_id
 LEFT JOIN {{ ref("customer_features") }} AS cf
     ON fo.customer_id = cf.customer_id
