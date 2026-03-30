@@ -33,8 +33,8 @@ DuckDB  snapshots schema
     │   └── products_snapshot   (tracks price/catalog changes)
     │
     ▼  dbt build
-DuckDB  staging     → clean 1:1 views from raw + snapshots
-        intermediate → business logic joins (ephemeral)
+DuckDB  staging      → clean 1:1 views from raw + snapshots + seeds
+        intermediate → business logic joins + surrogate key maps (ephemeral)
         marts/core   → dim_customers, fct_orders
         marts/features → customer_features (RFM), order_features (AOV, return risk)
 ```
@@ -72,7 +72,8 @@ Models are organized in three layers:
 
 ```
 staging/          Clean and rename raw columns. Incremental for log tables.
-intermediate/     Business logic joins. Not materialized (view).
+                  Includes stg_customer_id_mapping from seed data.
+intermediate/     Business logic joins + surrogate key maps for SCD entities.
 marts/
   core/           Reporting tables: dim_customers, fct_orders
   features/       ML feature tables: customer_features, order_features
@@ -80,18 +81,23 @@ marts/
 
 Each layer is tagged in `dbt_project.yml` (`staging`, `intermediate`, `core`, `features`). Dagster uses these tags to build per-layer jobs.
 
+#### Surrogate key enrichment
+
+`dbt/macros/` provides macros that precompute foreign key surrogate key (FK→SK) mappings from snapshots, and an enrichment macro to join them onto fact tables. This powers dimension lookups in `intermediate/` via `dim_customer_sk_map`, `dim_order_sk_map`, and `dim_product_sk_map`.
+
 ```bash
 make build        # full build + tests
+make build-prod   # build against prod target
 make freshness    # check source SLA (warn >12h, error >24h)
 make docs         # generate + serve lineage graph
 ```
 
-### 4. Orchestration — `dagster_project/`
+### 4. Orchestration — `dag/`
 
-Each pipeline layer maps to a Dagster job defined by a YAML config in `dagster_project/dags/`:
+Each pipeline layer maps to a Dagster job defined by a YAML config in `dag/dags/`:
 
 ```
-dagster_project/dags/
+dag/dags/
 ├── raw_ingestion.yml   → cron: 0 6 * * *  (daily at 6am)
 ├── snapshots.yml       → sensor: triggers after raw_ingestion
 ├── staging.yml         → sensor: triggers after snapshots
@@ -106,7 +112,7 @@ Each YAML config controls:
 - `catchup.enabled`: whether to support partition backfill
 - `retry`: max retries and delay
 
-`dagster_project/loader.py` reads these YAML files at startup and creates Dagster jobs + schedules automatically — no Python changes needed to add or reconfigure a job.
+`dag/loader.py` reads these YAML files at startup and creates Dagster jobs + schedules automatically — no Python changes needed to add or reconfigure a job.
 
 ```bash
 make dagster      # open http://localhost:3000
@@ -141,6 +147,8 @@ Downstream consumers are documented in `dbt/models/marts/features/_exposures.yml
 jaffle-shop/
 ├── Makefile                        # all commands
 ├── pyproject.toml                  # Python dependencies
+├── mkdocs.yml                      # documentation site config
+├── dagster_cloud.yaml              # Dagster Cloud deployment config
 ├── .env                            # local config (gitignored)
 ├── .env.example                    # template for new developers
 │
@@ -153,15 +161,23 @@ jaffle-shop/
 │   ├── dbt_project.yml             # layer tags + materializations
 │   ├── profiles.yml                # DuckDB connection (dev/prod)
 │   ├── packages.yml                # dbt-utils
+│   ├── seeds/
+│   │   └── customer_id_mapping.csv # static customer ID reference data
+│   ├── macros/                     # surrogate key enrichment macros
+│   │   ├── scd_surrogate_keys.sql
+│   │   ├── scd_sk_map.sql
+│   │   ├── fk_sk_enrich.sql
+│   │   └── snapshot_incremental_filter.sql
 │   ├── snapshots/                  # SCD Type 2 for customers, orders, products
 │   └── models/
 │       ├── staging/                # _sources.yml (freshness SLA), stg_*.sql
-│       ├── intermediate/           # int_customer_orders, int_order_payments
+│       ├── intermediate/           # int_customer_orders, int_order_payments,
+│       │                           # dim_*_sk_map (surrogate key lookups)
 │       └── marts/
 │           ├── core/               # dim_customers, fct_orders
 │           └── features/           # customer_features, order_features, exposures
 │
-└── dagster_project/
+└── dag/
     ├── dags/                       # one YAML config per job
     ├── assets/
     │   └── ingestion.py            # raw_jaffle_data asset (wraps dlt)
@@ -182,7 +198,7 @@ jaffle-shop/
 
 ```bash
 # 1. Install dependencies
-pip install -e ".[dev]"
+make install
 
 # 2. Copy and configure environment
 cp .env.example .env
@@ -191,6 +207,9 @@ cp .env.example .env
 
 # 3. Install dbt packages
 cd dbt && dbt deps --profiles-dir . && cd ..
+
+# 4. Install git hooks (runs lint on commit)
+pre-commit install
 ```
 
 ### Run the full pipeline (CLI)
@@ -231,7 +250,14 @@ make build        # incremental models process only new rows
 ```bash
 make lint         # SQLFluff: lint all SQL models
 make fix          # SQLFluff: auto-fix style issues
-pre-commit install # install git hooks (runs lint on commit)
 ```
 
 SQLFluff config: `.sqlfluff` (dialect: DuckDB, templater: dbt).
+
+---
+
+## Documentation
+
+```bash
+make blog         # serve MkDocs documentation site locally
+```
