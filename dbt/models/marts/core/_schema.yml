@@ -2,11 +2,18 @@ version: 2
 
 models:
   - name: dim_customers
-    description: "One row per customer with current profile and lifetime order summary."
+    description: >
+      One row per customer (current version) with surrogate keys and lifetime order summary.
+      Join fact tables on sk. Use master_sk for GROUP BY and COUNT DISTINCT across versions.
     columns:
-      - name: customer_id
-        description: "Primary key."
+      - name: sk
+        description: "Primary key — surrogate key of the current customer version."
         tests: [unique, not_null]
+      - name: master_sk
+        description: "Stable entity key — never changes across the customer lifetime."
+        tests: [not_null]
+      - name: customer_id
+        tests: [not_null]
       - name: email
         tests: [not_null]
       - name: status
@@ -19,12 +26,25 @@ models:
         tests: [not_null]
 
   - name: fct_orders
-    description: "One row per order with payment summary."
+    description: >
+      One row per order (current version) with payment summary and surrogate keys.
+      customer_sk is the point-in-time customer version active when the order was placed.
     columns:
-      - name: order_id
-        description: "Primary key."
+      - name: order_sk
+        description: "Primary key — surrogate key of the current order version."
         tests: [unique, not_null]
+      - name: order_master_sk
+        description: "Stable order entity key."
+        tests: [not_null]
+      - name: order_id
+        tests: [not_null]
       - name: customer_id
+        tests: [not_null]
+      - name: customer_sk
+        description: "Surrogate key of the customer version active at order placement time."
+        tests: [not_null]
+      - name: customer_master_sk
+        description: "Stable customer entity key — use for lifetime customer analytics."
         tests: [not_null]
       - name: order_status
         tests:
