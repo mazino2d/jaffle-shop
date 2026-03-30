@@ -4,25 +4,33 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - "dbt/**"
-      - "dlt/**"
-      - "pyproject.toml"
-      - ".pre-commit-config.yaml"
-      - ".github/workflows/ci.yml"
   push:
     branches:
       - main
-    paths:
-      - "dbt/**"
-      - "dlt/**"
-      - "pyproject.toml"
-      - ".pre-commit-config.yaml"
-      - ".github/workflows/ci.yml"
 
 jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      ci_relevant: ${{ steps.filter.outputs.ci_relevant }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            ci_relevant:
+              - "dbt/**"
+              - "dlt/**"
+              - "pyproject.toml"
+              - ".pre-commit-config.yaml"
+              - ".github/workflows/ci.yml"
+
   lint:
     name: Lint
+    needs: changes
+    if: needs.changes.outputs.ci_relevant == 'true'
     runs-on: ubuntu-latest
 
     steps:
@@ -45,6 +53,8 @@ jobs:
 
   dbt-build:
     name: dbt build
+    needs: changes
+    if: needs.changes.outputs.ci_relevant == 'true'
     runs-on: ubuntu-latest
 
     steps:
@@ -68,3 +78,15 @@ jobs:
       - name: dbt build (transform + test)
         working-directory: dbt
         run: dbt build --profiles-dir .
+
+  ci-pass:
+    name: CI pass
+    runs-on: ubuntu-latest
+    needs: [lint, dbt-build]
+    if: always()
+    steps:
+      - name: Check result
+        run: |
+          if [[ "${{ needs.lint.result }}" == "failure" || "${{ needs.dbt-build.result }}" == "failure" ]]; then
+            exit 1
+          fi
