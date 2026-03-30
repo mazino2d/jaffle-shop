@@ -4,9 +4,21 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - "dbt/**"
+      - "dlt/**"
+      - "pyproject.toml"
+      - ".pre-commit-config.yaml"
+      - ".github/workflows/ci.yml"
   push:
     branches:
       - main
+    paths:
+      - "dbt/**"
+      - "dlt/**"
+      - "pyproject.toml"
+      - ".pre-commit-config.yaml"
+      - ".github/workflows/ci.yml"
 
 jobs:
   lint:

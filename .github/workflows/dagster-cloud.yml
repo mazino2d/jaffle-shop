@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "dag/**"
+      - "dbt/**"
+      - "dlt/**"
+      - "dagster_cloud.yaml"
+      - "pyproject.toml"
+      - ".github/workflows/dagster-cloud.yml"
 
 jobs:
   deploy:
