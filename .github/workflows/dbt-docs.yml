@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "dbt/**"
+      - "dlt/**"
+      - "docs/**"
+      - "mkdocs.yml"
+      - "pyproject.toml"
+      - ".github/workflows/dbt-docs.yml"
 
 permissions:
   contents: read
