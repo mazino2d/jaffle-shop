@@ -24,5 +24,5 @@ SELECT
     COALESCE(co.returned_orders, 0) AS returned_orders
 FROM {{ ref("stg_customers") }} AS c
 LEFT JOIN {{ ref("int_customer_orders") }} AS co
-    ON c.customer_id = co.customer_id
+    ON c.master_sk = co.customer_master_sk
 WHERE c.is_current = TRUE
