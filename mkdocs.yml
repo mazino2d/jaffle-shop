@@ -49,10 +49,6 @@ extra:
 nav:
   - Home: index.md
 
-extra_meta:
-  - name: google-site-verification
-    content: P-srvRdes0C-eEovmPJ0olHQlwVHIHX_wyQvBeC-WrY
-
 validation:
   links:
     unrecognized_links: ignore
