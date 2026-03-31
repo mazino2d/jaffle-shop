@@ -1,6 +1,7 @@
 ---
 slug: storage-formats
 date: 2026-03-28
+description: Parquet is not just compressed CSV — column-oriented storage enables analytical engines to skip irrelevant data entirely, delivering order-of-magnitude query speedups.
 authors:
   - khoi
 categories:

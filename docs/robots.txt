@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mazino2d.github.io/jaffle-shop/sitemap.xml

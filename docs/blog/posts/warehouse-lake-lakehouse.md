@@ -1,6 +1,7 @@
 ---
 slug: warehouse-lake-lakehouse
 date: 2026-03-28
+description: Data warehouse, data lake, and lakehouse each make different tradeoffs — the right architecture depends on your data types, team, and query patterns, not industry trends.
 authors:
   - khoi
 categories:

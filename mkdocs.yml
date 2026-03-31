@@ -1,6 +1,8 @@
 site_name: Data Engineering Blog
 site_description: Principles and patterns in data engineering, demonstrated with a real pipeline.
 site_url: https://mazino2d.github.io/jaffle-shop/
+site_author: mazino2d
+copyright: Copyright &copy; 2025 mazino2d
 
 theme:
   name: material
@@ -26,6 +28,8 @@ theme:
 
 plugins:
   - search
+  - meta
+  - social
   - blog:
       blog_dir: blog
       post_date_format: long

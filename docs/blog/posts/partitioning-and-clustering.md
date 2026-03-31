@@ -1,6 +1,7 @@
 ---
 slug: partitioning-and-clustering
 date: 2026-03-28
+description: Partitioning and clustering are query optimization tools, not just storage strategies — learn how to design partition schemes that eliminate data reads for common query patterns.
 authors:
   - khoi
 categories:
