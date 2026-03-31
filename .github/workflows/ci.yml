@@ -23,6 +23,7 @@ jobs:
             ci_relevant:
               - "dbt/**"
               - "dlt/**"
+              - "dag/**"
               - "pyproject.toml"
               - ".pre-commit-config.yaml"
               - ".github/workflows/ci.yml"
@@ -72,12 +73,12 @@ jobs:
         working-directory: dbt
         run: dbt deps --profiles-dir .
 
-      - name: Ingest raw data
-        run: python dlt/pipeline.py
-
-      - name: dbt build (transform + test)
+      - name: Compile dbt manifest
         working-directory: dbt
-        run: dbt build --profiles-dir .
+        run: dbt compile --profiles-dir .
+
+      - name: Run full pipeline (ingest → snapshot → build)
+        run: dagster asset materialize -m dag.definitions --select "*"
 
   ci-pass:
     name: CI pass
