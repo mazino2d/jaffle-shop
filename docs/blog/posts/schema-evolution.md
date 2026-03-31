@@ -1,6 +1,7 @@
 ---
 slug: schema-evolution
 date: 2026-03-28
+description: Schema evolution is the most underestimated operational challenge in data pipelines — how to detect, handle, and recover from upstream source changes gracefully.
 authors:
   - khoi
 categories:

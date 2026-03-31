@@ -1,6 +1,7 @@
 ---
 slug: serving-layer
 date: 2026-03-28
+description: The serving layer is not one-size-fits-all — designing tables for BI dashboards, ML models, and operational APIs requires different materializations and update patterns.
 authors:
   - khoi
 categories:

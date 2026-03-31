@@ -1,6 +1,7 @@
 ---
 slug: incremental-processing
 date: 2026-03-28
+description: Incremental processing reduces pipeline cost by processing only new data, but introduces correctness challenges around late-arriving data that must be addressed explicitly.
 authors:
   - khoi
 categories:
