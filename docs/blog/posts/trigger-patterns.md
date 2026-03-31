@@ -1,6 +1,7 @@
 ---
 slug: trigger-patterns
 date: 2026-03-28
+description: Cron schedules, sensor-based triggers, and event-driven pipelines each make different tradeoffs — learn when each pattern keeps your pipeline correct and reliable.
 authors:
   - khoi
 categories:
