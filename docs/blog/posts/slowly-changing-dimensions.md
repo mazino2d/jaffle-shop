@@ -1,6 +1,7 @@
 ---
 slug: slowly-changing-dimensions
 date: 2026-03-28
+description: Slowly Changing Dimensions (SCD) handle how dimension tables track history when entities like customers and products change over time — covering SCD Type 1, 2, and 3.
 authors:
   - khoi
 categories:

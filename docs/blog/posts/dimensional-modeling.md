@@ -1,6 +1,7 @@
 ---
 slug: dimensional-modeling
 date: 2026-03-28
+description: An introduction to dimensional modeling — fact tables, dimension tables, and star schema design — built for how analysts actually query data, not how applications write it.
 authors:
   - khoi
 categories:

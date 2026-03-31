@@ -1,6 +1,7 @@
 ---
 slug: data-observability
 date: 2026-03-28
+description: Data observability goes beyond job monitoring to continuously track data freshness, schema health, and row-level correctness — because a successful job does not mean correct data.
 authors:
   - khoi
 categories:
