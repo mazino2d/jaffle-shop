@@ -50,5 +50,9 @@ models:
         tests:
           - accepted_values:
               values: ["placed", "shipped", "completed", "returned"]
+      - name: order_amount
+        tests: [not_null]
       - name: is_paid
+        tests: [not_null]
+      - name: is_returned
         tests: [not_null]

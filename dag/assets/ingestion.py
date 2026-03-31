@@ -23,14 +23,17 @@ def raw_jaffle_data(context: AssetExecutionContext) -> None:
     import dlt
     from sources.jaffle_shop import jaffle_shop
 
-    motherduck_token = os.getenv("MOTHERDUCK_TOKEN")
-    context.log.info(f"MOTHERDUCK_TOKEN set: {bool(motherduck_token)}")
-
-    if motherduck_token:
-        destination = dlt.destinations.motherduck("md:jaffle_shop")
-        context.log.info("Writing to: md:jaffle_shop (MotherDuck)")
+    target = os.getenv("DBT_TARGET", "dev")
+    if target == "cloud":
+        cloud_path = os.getenv("DUCKDB_CLOUD_PATH")
+        destination = dlt.destinations.motherduck(cloud_path)
+        context.log.info(f"Writing to: {cloud_path} (MotherDuck)")
+    elif target == "prod":
+        duckdb_path = os.getenv("DUCKDB_PROD_PATH")
+        destination = dlt.destinations.duckdb(duckdb_path)
+        context.log.info(f"Writing to: {duckdb_path}")
     else:
-        duckdb_path = os.getenv("DUCKDB_DEV_PATH", "./jaffle_shop_dev.duckdb")
+        duckdb_path = os.getenv("DUCKDB_DEV_PATH")
         destination = dlt.destinations.duckdb(duckdb_path)
         context.log.info(f"Writing to: {duckdb_path}")
 

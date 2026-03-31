@@ -58,6 +58,12 @@ models:
         tests: [not_null]
       - name: customer_id
         tests: [not_null]
+      - name: customer_sk
+        description: "Surrogate key of the customer version active when the order was placed."
+        tests: [not_null]
+      - name: customer_master_sk
+        description: "Stable customer entity key."
+        tests: [not_null]
       - name: is_current
         tests: [not_null]
       - name: status
@@ -72,6 +78,12 @@ models:
         tests: [unique, not_null]
       - name: order_id
         tests: [not_null]
+      - name: order_sk
+        description: "Surrogate key of the order version active at payment time."
+        tests: [not_null]
+      - name: order_master_sk
+        description: "Stable order entity key."
+        tests: [not_null]
       - name: payment_status
         tests:
           - accepted_values:
@@ -83,4 +95,18 @@ models:
       - name: order_item_id
         tests: [unique, not_null]
       - name: order_id
+        tests: [not_null]
+      - name: order_sk
+        description: "Surrogate key of the order version active at item creation time."
+        tests: [not_null]
+      - name: order_master_sk
+        description: "Stable order entity key."
+        tests: [not_null]
+      - name: product_id
+        tests: [not_null]
+      - name: product_sk
+        description: "Surrogate key of the product version active at item creation time."
+        tests: [not_null]
+      - name: product_master_sk
+        description: "Stable product entity key."
         tests: [not_null]

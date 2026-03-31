@@ -14,7 +14,7 @@ This is a demo end-to-end data pipeline using a fictional e-commerce store (Jaff
 
 | Layer | Tool | Entry point |
 |---|---|---|
-| Ingestion | dlt | `dlt/pipeline.py`, `dlt/sources/jaffle_shop.py` |
+| Ingestion | dlt | `dlt/sources/jaffle_shop.py`, `dag/assets/ingestion.py` |
 | Warehouse | DuckDB | `jaffle_shop_dev.duckdb` (local, gitignored) |
 | Transformation | dbt | `dbt/` |
 | Orchestration | Dagster | `dag/definitions.py` |
@@ -53,16 +53,26 @@ dag/
 
 Adding or reconfiguring a job: edit/add a YAML file in `dag/dags/` — no Python changes needed.
 
+### Environments
+
+The pipeline target is set via `DBT_TARGET` in `.env` (default: `dev`):
+
+| Target | Database | Required env vars |
+| --- | --- | --- |
+| `dev` | Local DuckDB | `DUCKDB_DEV_PATH` |
+| `prod` | Local DuckDB | `DUCKDB_PROD_PATH` |
+| `cloud` | MotherDuck | `MOTHERDUCK_TOKEN` |
+
+All `make` commands pick up `DBT_TARGET` automatically. The `cloud` target writes to `md:jaffle_shop` via MotherDuck.
+
 ### Common commands
 
 ```bash
 make install      # install all Python dependencies
-make ingest       # run dlt pipeline (raw schema)
-make snapshot     # run dbt snapshots (SCD Type 2)
-make build        # dbt build + tests (dev)
-make build-prod   # dbt build + tests (prod)
-make pipeline     # ingest → snapshot → build in sequence
-make freshness    # check source SLA (warn >12h, error >24h)
+make ingest       # materialize raw_jaffle_data asset (dlt via Dagster)
+make snapshot     # materialize jaffle_snapshot_assets (dbt snapshot)
+make build        # materialize jaffle_dbt_assets (dbt build + tests)
+make pipeline     # materialize all assets in sequence
 make docs         # generate + serve dbt lineage graph
 make dagster      # start Dagster UI at http://localhost:3000
 make blog         # serve MkDocs documentation site

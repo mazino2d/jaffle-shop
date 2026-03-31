@@ -1,19 +1,16 @@
-.PHONY: ingest snapshot build build-prod freshness docs blog dagster lint fix pipeline sync install
+.PHONY: ingest snapshot build pipeline docs blog dagster lint fix sync install
 
 ingest:
-	python dlt/pipeline.py
+	dagster asset materialize -m dag.definitions --select raw_jaffle_data
 
 snapshot:
-	cd dbt && dbt snapshot --profiles-dir .
+	dagster asset materialize -m dag.definitions --select jaffle_snapshot_assets
 
 build:
-	cd dbt && dbt build --profiles-dir .
+	dagster asset materialize -m dag.definitions --select jaffle_dbt_assets
 
-build-prod:
-	cd dbt && dbt build --profiles-dir . --target prod
-
-freshness:
-	cd dbt && dbt source freshness --profiles-dir .
+pipeline:
+	dagster asset materialize -m dag.definitions --select "*"
 
 docs:
 	cd dbt && dbt docs generate --profiles-dir . && dbt docs serve --profiles-dir .
@@ -29,9 +26,6 @@ lint:
 
 fix:
 	sqlfluff fix dbt/models
-
-pipeline:
-	$(MAKE) ingest && $(MAKE) snapshot && $(MAKE) build
 
 sync:
 	pip-compile pyproject.toml -o requirements.txt

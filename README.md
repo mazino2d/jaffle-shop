@@ -52,7 +52,7 @@ DuckDB  staging      → clean 1:1 views from raw + snapshots + seeds
 
 ### 1. Ingestion — `dlt/`
 
-`dlt/sources/jaffle_shop.py` defines five resources using Faker to simulate a backend database. Running the pipeline loads all tables into DuckDB under the `raw` schema.
+`dlt/sources/jaffle_shop.py` defines five resources using Faker to simulate a backend database. The pipeline is orchestrated as a Dagster asset (`raw_jaffle_data`) and writes all tables into DuckDB under the `raw` schema. The target database (dev, prod, or cloud) is selected via `DBT_TARGET` in `.env`.
 
 ```bash
 make ingest
@@ -86,9 +86,7 @@ Each layer is tagged in `dbt_project.yml` (`staging`, `intermediate`, `core`, `f
 `dbt/macros/` provides macros that precompute foreign key surrogate key (FK→SK) mappings from snapshots, and an enrichment macro to join them onto fact tables. This powers dimension lookups in `intermediate/` via `dim_customer_sk_map`, `dim_order_sk_map`, and `dim_product_sk_map`.
 
 ```bash
-make build        # full build + tests
-make build-prod   # build against prod target
-make freshness    # check source SLA (warn >12h, error >24h)
+make build        # full build + tests (uses DBT_TARGET from .env)
 make docs         # generate + serve lineage graph
 ```
 
@@ -153,9 +151,8 @@ jaffle-shop/
 ├── .env.example                    # template for new developers
 │
 ├── dlt/
-│   ├── sources/
-│   │   └── jaffle_shop.py          # Faker-based source (5 tables)
-│   └── pipeline.py                 # standalone runner
+│   └── sources/
+│       └── jaffle_shop.py          # Faker-based source (5 tables)
 │
 ├── dbt/
 │   ├── dbt_project.yml             # layer tags + materializations
@@ -202,8 +199,7 @@ make install
 
 # 2. Copy and configure environment
 cp .env.example .env
-# Edit .env: set DUCKDB_DEV_PATH to the absolute path of this repo
-# e.g. DUCKDB_DEV_PATH=/home/user/jaffle-shop/jaffle_shop_dev.duckdb
+# Edit .env — see "Environments" below
 
 # 3. Install dbt packages
 cd dbt && dbt deps --profiles-dir . && cd ..
@@ -211,6 +207,33 @@ cd dbt && dbt deps --profiles-dir . && cd ..
 # 4. Install git hooks (runs lint on commit)
 pre-commit install
 ```
+
+### Environments
+
+The pipeline supports three targets, controlled by `DBT_TARGET` in `.env`:
+
+| Target | Database | When to use |
+| --- | --- | --- |
+| `dev` _(default)_ | Local DuckDB (`DUCKDB_DEV_PATH`) | Day-to-day development |
+| `prod` | Local DuckDB (`DUCKDB_PROD_PATH`) | Production dataset, separate file |
+| `cloud` | MotherDuck (`md:jaffle_shop`) | Cloud-hosted DuckDB via MotherDuck |
+
+**dev / prod** — set the absolute path to the `.duckdb` file:
+
+```env
+DBT_TARGET=dev
+DUCKDB_DEV_PATH=/home/user/jaffle-shop/jaffle_shop_dev.duckdb
+DUCKDB_PROD_PATH=/home/user/jaffle-shop/jaffle_shop_prod.duckdb
+```
+
+**cloud** — set your MotherDuck token and switch the target:
+
+```env
+DBT_TARGET=cloud
+MOTHERDUCK_TOKEN=your_motherduck_token_here
+```
+
+All `make` commands (`ingest`, `build`, `pipeline`, etc.) pick up `DBT_TARGET` automatically — no flags needed.
 
 ### Run the full pipeline (CLI)
 

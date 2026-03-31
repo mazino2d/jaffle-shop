@@ -13,21 +13,26 @@ from pathlib import Path
 
 from dagster import Definitions
 from dagster_dbt import DbtCliResource, dbt_assets
+from dotenv import load_dotenv
 
 from dag.assets.ingestion import raw_jaffle_data
 from dag.loader import build_jobs_and_schedules
+
+load_dotenv()
 
 REPO_ROOT = Path(__file__).parent.parent
 DBT_PROJECT_DIR = REPO_ROOT / "dbt"
 DBT_MANIFEST = DBT_PROJECT_DIR / "target" / "manifest.json"
 os.environ.setdefault("DUCKDB_DEV_PATH", str(REPO_ROOT / "jaffle_shop_dev.duckdb"))
 os.environ.setdefault("DUCKDB_PROD_PATH", str(REPO_ROOT / "jaffle_shop_prod.duckdb"))
+os.environ.setdefault("DUCKDB_CLOUD_PATH", "md:jaffle_shop")
 
 
 @dbt_assets(
     manifest=DBT_MANIFEST,
     select="resource_type:snapshot",
     name="jaffle_snapshot_assets",
+    group_name="snapshots",
 )
 def jaffle_snapshot_assets(context, dbt: DbtCliResource):
     # Snapshots require 'dbt snapshot', not 'dbt build'
@@ -38,6 +43,7 @@ def jaffle_snapshot_assets(context, dbt: DbtCliResource):
     manifest=DBT_MANIFEST,
     exclude="resource_type:snapshot",
     name="jaffle_dbt_assets",
+    group_name="dbt_models",
 )
 def jaffle_dbt_assets(context, dbt: DbtCliResource):
     yield from dbt.cli(["build"], context=context).stream()

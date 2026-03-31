@@ -45,6 +45,10 @@ _sk_base AS (
     FROM {{ snapshot_ref }}
     {% if is_incremental() %}
     WHERE dbt_valid_from > (SELECT MAX(valid_from) FROM {{ this }})
+       OR (
+           dbt_valid_to IS NOT NULL
+           AND dbt_scd_id IN (SELECT sk FROM {{ this }} WHERE is_current = TRUE)
+       )
     {% endif %}
 ),
 
