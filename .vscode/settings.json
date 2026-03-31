@@ -11,6 +11,8 @@
         "build": true,
         "dist": true,
         ".tmp_dagster*":true,
+        "site": true,
+        ".cache": true,
     },
     "python.analysis.extraPaths": ["dlt"],
     "python-envs.defaultEnvManager": "ms-python.python:conda",

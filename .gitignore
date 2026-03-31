@@ -25,5 +25,9 @@ dbt/.user.yml
 dagster_home/
 .tmp_dagster*
 
+# MkDocs
+site/
+.cache/
+
 # OS
 .DS_Store

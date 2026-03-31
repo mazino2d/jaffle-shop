@@ -6,6 +6,7 @@ copyright: Copyright &copy; 2025 mazino2d
 
 theme:
   name: material
+  custom_dir: overrides
   palette:
     - scheme: default
       primary: indigo
@@ -29,7 +30,6 @@ theme:
 plugins:
   - search
   - meta
-  - social
   - blog:
       blog_dir: blog
       post_date_format: long
