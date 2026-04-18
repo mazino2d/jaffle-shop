@@ -3,7 +3,7 @@ slug: fact-table-patterns
 date: 2026-03-28
 description: Compare the three fact table patterns — transactional, periodic snapshot, and accumulating snapshot — and learn which design fits each type of business measurement.
 authors:
-  - khoi
+  - Mazino2D
 categories:
   - Data Modeling
 tags:

@@ -3,7 +3,7 @@ slug: surrogate-vs-natural-keys
 date: 2026-03-28
 description: Surrogate keys decouple your data model from source system volatility, protecting downstream joins when natural keys change, merge, or carry inconsistent formats.
 authors:
-  - khoi
+  - Mazino2D
 categories:
   - Data Modeling
 tags:

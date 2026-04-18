@@ -3,7 +3,7 @@ slug: data-contracts
 date: 2026-03-28
 description: Data contracts formalize the agreement between data producers and consumers, preventing silent pipeline failures when source schemas change unexpectedly.
 authors:
-  - khoi
+  - Mazino2D
 categories:
   - Quality & Reliability
 tags:

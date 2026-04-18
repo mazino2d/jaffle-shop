@@ -3,7 +3,7 @@ slug: dag-fundamentals
 date: 2026-03-28
 description: Learn how Directed Acyclic Graphs (DAGs) model pipeline dependencies, why cycles cause deadlocks, and how orchestrators use DAGs to manage execution order.
 authors:
-  - khoi
+  - Mazino2D
 categories:
   - Orchestration
 tags:

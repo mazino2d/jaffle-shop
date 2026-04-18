@@ -3,7 +3,7 @@ slug: staging-intermediate-marts
 date: 2026-03-28
 description: Layered dbt transformation architecture — staging, intermediate, and marts — gives each transformation a single responsibility, making models easier to test and maintain.
 authors:
-  - khoi
+  - Mazino2D
 categories:
   - Transformation
 tags:
