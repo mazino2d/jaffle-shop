@@ -3,7 +3,7 @@ slug: ingestion-patterns
 date: 2026-03-28
 description: Compare three data ingestion patterns — full refresh, incremental load, and CDC — with their tradeoffs in simplicity, latency, and correctness for different source types.
 authors:
-  - khoi
+  - Mazino2D
 categories:
   - Ingestion
 tags:

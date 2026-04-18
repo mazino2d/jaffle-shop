@@ -3,7 +3,7 @@ slug: batch-vs-streaming
 date: 2026-03-28
 description: Understand the tradeoffs between batch, streaming, and micro-batch processing models, and how to choose the right approach for your actual business needs.
 authors:
-  - khoi
+  - Mazino2D
 categories:
   - Foundations
 tags:

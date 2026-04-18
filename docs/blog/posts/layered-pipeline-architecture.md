@@ -3,7 +3,7 @@ slug: layered-pipeline-architecture
 date: 2026-03-28
 description: Why a monolithic ETL script fails at scale, and how layered architecture separates ingestion, transformation, and serving into independently testable stages.
 authors:
-  - khoi
+  - Mazino2D
 categories:
   - Foundations
 tags:

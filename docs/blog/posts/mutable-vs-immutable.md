@@ -3,7 +3,7 @@ slug: mutable-vs-immutable
 date: 2026-03-28
 description: The most fundamental split in data engineering — mutable entities that change in place versus immutable events that accumulate — and why mixing them corrupts history.
 authors:
-  - khoi
+  - Mazino2D
 categories:
   - Foundations
 tags:

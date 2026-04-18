@@ -3,7 +3,7 @@ slug: feature-engineering
 date: 2026-03-28
 description: Build ML feature tables that avoid data leakage by capturing point-in-time state, bridging the gap between analytical marts and machine learning model training.
 authors:
-  - khoi
+  - Mazino2D
 categories:
   - Serving
 tags:

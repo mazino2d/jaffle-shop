@@ -3,7 +3,7 @@ slug: elt-vs-etl
 date: 2026-03-28
 description: ELT and ETL differ by more than letter order — they represent fundamentally different assumptions about where computation should happen in a modern data stack.
 authors:
-  - khoi
+  - Mazino2D
 categories:
   - Foundations
 tags:
