@@ -3,7 +3,7 @@ slug: semantic-layer
 date: 2026-03-28
 description: The semantic layer defines business metrics once in a central location, eliminating inconsistent definitions scattered across dashboards, reports, and notebooks.
 authors:
-  - khoi
+  - Mazino2D
 categories:
   - Transformation
 tags:

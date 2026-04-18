@@ -3,7 +3,7 @@ slug: backfilling-and-catchup
 date: 2026-03-28
 description: Learn how to safely reprocess historical data in data pipelines — the difference between backfilling and catchup, and how to design pipelines that support both.
 authors:
-  - khoi
+  - Mazino2D
 categories:
   - Orchestration
 tags:

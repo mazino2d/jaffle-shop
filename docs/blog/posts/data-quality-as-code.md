@@ -3,7 +3,7 @@ slug: data-quality-as-code
 date: 2026-03-28
 description: Define data quality tests in code, run them on every pipeline execution, and catch bad data before it reaches dashboards and downstream consumers.
 authors:
-  - khoi
+  - Mazino2D
 categories:
   - Quality & Reliability
 tags:

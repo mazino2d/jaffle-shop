@@ -3,7 +3,7 @@ slug: idempotency
 date: 2026-03-28
 description: Idempotent pipelines produce the same result whether run once or ten times — the essential property for safe retries and reliable operational recovery.
 authors:
-  - khoi
+  - Mazino2D
 categories:
   - Ingestion
 tags:

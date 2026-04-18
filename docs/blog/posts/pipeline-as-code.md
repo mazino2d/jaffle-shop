@@ -3,7 +3,7 @@ slug: pipeline-as-code
 date: 2026-03-28
 description: Configuration-driven orchestration separates pipeline behavior from pipeline logic, enabling new jobs to be added without code changes by defining them in YAML.
 authors:
-  - khoi
+  - Mazino2D
 categories:
   - Orchestration
 tags:
