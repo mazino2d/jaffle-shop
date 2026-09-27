@@ -97,10 +97,18 @@ jobs:
       VALUES_FILE: kubernetes/clusters/mazino2d-as-se1-dev/apps/dagster/values.yaml
 
     steps:
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.EAC_DEPLOYER_APP_ID }}
+          private-key: ${{ secrets.EAC_DEPLOYER_PRIVATE_KEY }}
+          owner: mazino2d
+          repositories: everything-as-code
+
       - uses: actions/checkout@v4
         with:
           repository: mazino2d/everything-as-code
-          token: ${{ secrets.EVERYTHING_AS_CODE_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Update image tag
         id: tag
@@ -114,7 +122,7 @@ jobs:
         id: pr
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.EVERYTHING_AS_CODE_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
           branch: bump/jaffle-shop-dev
           title: "chore: bump jaffle-shop dev image to ${{ steps.tag.outputs.tag }}"
           commit-message: "chore: bump jaffle-shop dev image to ${{ steps.tag.outputs.tag }}"
@@ -125,5 +133,5 @@ jobs:
       - name: Enable auto-merge
         if: steps.pr.outputs.pull-request-number
         env:
-          GH_TOKEN: ${{ secrets.EVERYTHING_AS_CODE_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: gh pr merge ${{ steps.pr.outputs.pull-request-number }} --repo mazino2d/everything-as-code --squash --auto
