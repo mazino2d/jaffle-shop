@@ -14,6 +14,8 @@ dependencies = [
     # Keep in lockstep with the Dagster Helm chart version (webserver/daemon images)
     "dagster==1.13.24",
     "dagster-dbt==0.29.24",
+    # Runs execute in the code server (DefaultRunLauncher) and load the Postgres-backed instance
+    "dagster-postgres==0.29.24",
     "dagster-webserver==1.13.24",
     "faker>=24",
     "pyyaml>=6",
