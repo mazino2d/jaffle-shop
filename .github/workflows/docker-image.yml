@@ -83,3 +83,47 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
+
+  # dev deploys every image pushed from main; stg/prod tags are bumped by hand in everything-as-code
+  bump-dev:
+    name: Bump dev image tag
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: bump-dev
+      cancel-in-progress: false
+    env:
+      VALUES_FILE: kubernetes/clusters/mazino2d-as-se1-dev/apps/dagster/values.yaml
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: mazino2d/everything-as-code
+          token: ${{ secrets.EVERYTHING_AS_CODE_TOKEN }}
+
+      - name: Update image tag
+        id: tag
+        run: |
+          tag="sha-${GITHUB_SHA::7}"
+          sed -i "\|repository: ghcr.io/${{ github.repository }}|,\|tag:| s|tag: .*|tag: ${tag}|" "$VALUES_FILE"
+          grep -q "tag: ${tag}" "$VALUES_FILE"
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+
+      - name: Open pull request
+        id: pr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.EVERYTHING_AS_CODE_TOKEN }}
+          branch: bump/jaffle-shop-dev
+          title: "chore: bump jaffle-shop dev image to ${{ steps.tag.outputs.tag }}"
+          commit-message: "chore: bump jaffle-shop dev image to ${{ steps.tag.outputs.tag }}"
+          body: |
+            Automated bump from ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}.
+          delete-branch: true
+
+      - name: Enable auto-merge
+        if: steps.pr.outputs.pull-request-number
+        env:
+          GH_TOKEN: ${{ secrets.EVERYTHING_AS_CODE_TOKEN }}
+        run: gh pr merge ${{ steps.pr.outputs.pull-request-number }} --repo mazino2d/everything-as-code --squash --auto
