@@ -51,6 +51,11 @@ dag/
   definitions.py  Dagster entry point
 ```
 
+Deployment: self-hosted Dagster OSS on the `mazino2d-as-se1-dev` GKE cluster (repo `everything-as-code`,
+`kubernetes/clusters/mazino2d-as-se1-dev/apps/dagster/`). The root `Dockerfile` builds the code location image
+(`dagster api grpc -m dag`), pushed to `ghcr.io/mazino2d/jaffle-shop` by `.github/workflows/docker-image.yml`.
+Keep `dagster*` pins in `pyproject.toml` in lockstep with the Dagster Helm chart version.
+
 Adding or reconfiguring a job: edit/add a YAML file in `dag/dags/` — no Python changes needed.
 
 ### Common commands
