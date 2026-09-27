@@ -16,6 +16,8 @@ dependencies = [
     "dagster-dbt==0.29.24",
     # Runs execute in the code server (DefaultRunLauncher) and load the Postgres-backed instance
     "dagster-postgres==0.29.24",
+    # SQLAlchemy 2.1 defaults postgresql:// to psycopg (v3); dagster-postgres ships psycopg2
+    "sqlalchemy>=2.0,<2.1",
     "dagster-webserver==1.13.24",
     "faker>=24",
     "pyyaml>=6",
