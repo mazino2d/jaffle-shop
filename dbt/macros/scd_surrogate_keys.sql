@@ -44,7 +44,11 @@ _sk_base AS (
         * EXCLUDE (dbt_scd_id, dbt_updated_at, dbt_valid_from, dbt_valid_to, {{ id_col }})
     FROM {{ snapshot_ref }}
     {% if is_incremental() %}
+    -- New versions, plus prior versions the snapshot just closed (dbt_valid_to set).
+    -- Without the second branch, closed versions keep valid_to = NULL / is_current = TRUE
+    -- in the target, producing overlapping windows and PIT-join fan-out downstream.
     WHERE dbt_valid_from > (SELECT MAX(valid_from) FROM {{ this }})
+        OR dbt_valid_to > (SELECT MAX(valid_from) FROM {{ this }})
     {% endif %}
 ),
 
