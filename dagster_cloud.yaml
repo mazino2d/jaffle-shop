@@ -1,6 +1,0 @@
-locations:
-  - location_name: jaffle-shop
-    code_source:
-      package_name: dag
-    build:
-      directory: .

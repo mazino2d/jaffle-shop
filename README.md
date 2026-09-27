@@ -118,6 +118,10 @@ Each YAML config controls:
 make dagster      # open http://localhost:3000
 ```
 
+In production, Dagster OSS runs on a self-hosted GKE cluster (`everything-as-code` repo, Argo CD). The root
+`Dockerfile` builds the code location image, which `.github/workflows/docker-image.yml` pushes to
+`ghcr.io/mazino2d/jaffle-shop` on every merge to `main`. Runs load into MotherDuck (`md:jaffle_shop`).
+
 ---
 
 ## ML Features
@@ -148,7 +152,7 @@ jaffle-shop/
 ├── Makefile                        # all commands
 ├── pyproject.toml                  # Python dependencies
 ├── mkdocs.yml                      # documentation site config
-├── dagster_cloud.yaml              # Dagster Cloud deployment config
+├── Dockerfile                      # Dagster code location image (self-hosted k8s)
 ├── .env                            # local config (gitignored)
 ├── .env.example                    # template for new developers
 │
